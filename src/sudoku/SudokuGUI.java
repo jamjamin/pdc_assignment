@@ -6,52 +6,169 @@
 package sudoku;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SudokuGUI extends JFrame {
+public class SudokuGUI extends JFrame implements ActionListener {
+    
+    Container mainContainer;
+    CardLayout crd = new CardLayout(10, 10);
     
     // Main Panels
-    private JPanel loginScreen = new JPanel(new BorderLayout());
-    private JPanel gameScreen = new JPanel();
+    private JPanel loginScreen = new JPanel(new BorderLayout(5, 5));
+    private JPanel gameScreen = new JPanel(new BorderLayout(5, 5));
         
     // Login Panel Setup
     private JPanel titlePanel = new JPanel();
     private JPanel loginPanel = new JPanel();
-    
-    private JLabel title = new JLabel("Welcome to Sudoku!");
-    
+    private JLabel title = new JLabel("Welcome to Sudoku!");   
     private JLabel uNameLabel = new JLabel("Username: ");
-    private JLabel pWordLabel = new JLabel("Password: ");
-    
+    private JLabel pWordLabel = new JLabel("Password: ");    
     private JTextField inputUserName = new JTextField(15);
-    private JTextField inputPassword = new JTextField(15);
-   
+    private JTextField inputPassword = new JTextField(15);  
     private JButton loginButton = new JButton("Login");
     private JButton registerButton = new JButton("Register");
     
     // Sudoku Game Panel Setup
     
+    int currentX; // Selected square at X
+    int currentY; // Selected square at Y
+    
+    private JLabel[][] square = new JLabel[9][9];
+    private JPanel boardPanel = new JPanel(new GridLayout(9, 9));
+    private JPanel rightPanel = new JPanel(new GridLayout(2, 1, 1, 125));
+    private JPanel numPad = new JPanel(new GridLayout(3, 3));
+    private JPanel buttonPanel = new JPanel(new GridLayout(4, 1));
+    private JButton saveExit = new JButton("Save & Exit");
+    private JButton check = new JButton("Check");
+    private JButton newGame = new JButton("New Game");
+    private JButton help = new JButton("Help");
+    
     public SudokuGUI () {
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 600);
+        this.setSize(600, 455);
+        this.mainContainer = this.getContentPane();
+        this.mainContainer.setLayout(crd);
         
-        add(loginScreen);
+        mainContainer.add("a", loginScreen);
+        mainContainer.add("b", gameScreen);
         
         loginScreen.add(titlePanel, BorderLayout.NORTH);
         titlePanel.add(title);
+        title.setFont(new Font("Serif", Font.PLAIN, 40));
         
         loginScreen.add(loginPanel, BorderLayout.CENTER);
         
-        loginPanel.add(uNameLabel);   
+        loginPanel.add(uNameLabel);
         loginPanel.add(inputUserName);
         loginPanel.add(pWordLabel);
         loginPanel.add(inputPassword);
         loginPanel.add(loginButton);
+        loginPanel.add(registerButton);
+        
+        loginButton.addActionListener(this);
+        registerButton.addActionListener(this);
+        
+        // Game Screen
+        
+        for(int i= 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) {
+                square[i][j] = new GridSquare(i, j);
+                boardPanel.add(square[i][j]);
+            }
+        }
+        gameScreen.add(boardPanel);
+        gameScreen.add(rightPanel, BorderLayout.EAST);
+        rightPanel.add(numPad);
+        for (int i = 0; i < 9; i++) {
+            numPad.add(new KeypadButton(i + 1));
+        }
+        
+        buttonPanel.add(saveExit);
+        buttonPanel.add(check);
+        buttonPanel.add(newGame);
+        buttonPanel.add(help);
+        rightPanel.add(buttonPanel);
+    }
+    
+    private class GridSquare extends JLabel implements MouseListener {
+        
+        int gridX;
+        int gridY;
+        boolean editable;
+
+        public GridSquare(int x, int y) {
+            this.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+            this.setFont(new Font("Arial", Font.PLAIN, 20));
+            this.setForeground(Color.BLACK);
+            this.setBackground(Color.WHITE);
+            this.setOpaque(true);
+            this.setHorizontalAlignment(JTextField.CENTER);
+            this.gridX = x;
+            this.gridY = y;
+            
+            this.addMouseListener(this);
+        }
+        public GridSquare(int x, int y, String str) {
+            this(x, y);
+            this.setText(str);
+        }
+        
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            System.out.println(this.gridX);
+            System.out.println(this.gridY);
+            currentX = this.gridX;
+            currentY = this.gridY;
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            currentX = this.gridX;
+            currentY = this.gridY;
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+    
+    private class KeypadButton extends JButton implements ActionListener {
+        
+        int setNum;
+        
+        public KeypadButton (int i) {
+            this.setNum = i;
+            this.setText("" + i);
+            this.addActionListener(this);
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            square[currentX][currentY].setText("" + setNum);
+        }
+        
+    }
+    
+    public void switchToGameScreen() {
+        crd.show(mainContainer, "b");
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switchToGameScreen();
     }
     
     public static void main(String[] args) {
@@ -60,4 +177,6 @@ public class SudokuGUI extends JFrame {
         SudokuGUI gui = new SudokuGUI();
         gui.setVisible(true);
     }
+
+    
 }
