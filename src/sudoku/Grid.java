@@ -28,7 +28,7 @@ public class Grid implements Serializable {
 
     /**
      *
-     * Does the same thing above but uses Position object. Mainly used for grid editing.
+     * Does the same thing above but uses Position object.
      *
      * @param pos Cell's position
      *
@@ -42,7 +42,7 @@ public class Grid implements Serializable {
 
     /**
      *
-     * Sets cell's number at a specific position (Using Position object for grid editing).
+     * Sets cell's number at a specific position.
      *
      * @param pos
      * @param num
