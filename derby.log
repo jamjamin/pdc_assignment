@@ -1,13 +1,16 @@
+Tue May 31 00:16:18 NZST 2022 : Apache Derby Network Server - 10.14.2.0 - (1828579) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Mon May 30 13:20:19 NZST 2022:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0181-128c-af75-00000e614460 
-on database directory E:\[AUT Things]\PDC\Assignments\Assignment2\SudokuDB with class loader sun.misc.Launcher$AppClassLoader@5c647e05 
-Loaded from file:/E:/%5bAUT%20Things%5d/PDC/Assignments/Assignment2/lib/derby.jar
+Tue May 31 00:16:18 NZST 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0181-14e5-3073-fffffd51560a 
+on database directory E:\[AUT Things]\PDC\Assignments\Assignment2\SudokuDB with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Users/Benjiman%20Daman/Desktop/Things/%5bLife%20Things%5d/Progamming%20Things/db-derby-10.14.2.0-bin/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_101-b13
-user.dir=E:\[AUT Things]\PDC\Assignments\Assignment2
+user.dir=C:\Users\Benjiman Daman\Desktop\Things\[Life Things]\Progamming Things\db-derby-10.14.2.0-bin
 os.name=Windows 10
 os.arch=amd64
 os.version=10.0
-derby.system.home=null
+derby.system.home=E:\[AUT Things]\PDC\Assignments\Assignment2
 Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Tue May 31 00:16:35 NZST 2022: Shutting down Derby engine
