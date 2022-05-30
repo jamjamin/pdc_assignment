@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package sudoku;
 
 import java.util.Observable;
@@ -12,9 +9,14 @@ public class SudokuGame extends Observable {
     public SudokuData data;
     public String username;
     
+    public Grid game_grid;
+    public GridGenerator game_gen;
+    public GridChecker grid_check;
+    
     public SudokuGame() {
         sdb = new SudokuDB();
         sdb.dbsetup();
+        game_gen = new GridGenerator();
     }
     
     public void loginUser(String un, String pw) {
@@ -34,7 +36,24 @@ public class SudokuGame extends Observable {
         
         this.data = this.sdb.registerUser(un, pw);
         
+        if (data.newUser) {
+            System.out.println("A new user has been summoned");             
+            data.user_grid = game_gen.generateGrid();
+        }
+        this.setChanged();
+        this.notifyObservers(this.data);
+    }
+    
+    public void checkGrid(Grid grid) {
+        game_grid = grid;
+        grid_check = new GridChecker(game_grid);
         
+        if (grid_check.solveGrid()) {
+            System.out.println("YAY");
+        }
+        else {
+            System.out.println("Nop");
+        }
     }
    
 }

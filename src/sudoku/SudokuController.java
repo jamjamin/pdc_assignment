@@ -20,11 +20,16 @@ public class SudokuController implements ActionListener {
         String username = this.gui.inputUserName.getText();
         String password = this.gui.inputPassword.getText();
         switch (command) {
+            // Login Cases
             case "Login":
                 this.game.loginUser(username, password);
                 break;
             case "Register":
                 this.game.registerUser(username, password);
+                break;
+            // Main Game Cases
+            case "Check":
+                this.game.checkGrid(gui.getSudokuGrid());
                 break;
             default:
                 break;

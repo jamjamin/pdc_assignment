@@ -5,8 +5,13 @@
 package sudoku;
 
 public class SudokuData {
+    
+    // User Login + Registeration Flags
     boolean loginFlag = false;
     boolean logoutFlag = false;
     boolean newUser = false;
     
+    // Grid Data
+    Grid user_grid;
+    Grid game_grid;
 }

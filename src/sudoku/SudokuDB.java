@@ -40,6 +40,7 @@ public class SudokuDB {
                 this.statement.executeBatch();
                 System.out.println("Data inserted");
             }
+            statement.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.out.println("TLDR: Did not work :(");
@@ -49,7 +50,7 @@ public class SudokuDB {
     public SudokuData loginUser(String un, String pw) {
         SudokuData data = new SudokuData();
         try {
-            Statement statement = conn.createStatement();
+            this.statement = conn.createStatement();
             ResultSet rs = statement.executeQuery("SELECT userid, username, password FROM USERS "
                                                 + "where username = '" + un + "'");
             if (rs.next()) {
@@ -65,6 +66,7 @@ public class SudokuDB {
                 System.out.println("No user exist");
                 data.loginFlag = false;
             }
+            statement.close();
         } catch (SQLException ex) {
             Logger.getLogger(SudokuDB.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -75,8 +77,8 @@ public class SudokuDB {
         SudokuData data = new SudokuData();
         int numRecords;
         try {
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT userid, username, password FROM USERS "
+            this.statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT userid, username, password FROM Users "
                                                 + "where username = '" + un + "'");
             if (rs.next()) {
                 System.out.println("User exist");
@@ -84,24 +86,39 @@ public class SudokuDB {
             } 
             else {
                 System.out.println("No user exist");
-                //this.statement.addBatch("INSERT INTO Users VALUES (1, '" + un + "', '" + pw + "')");
-                //this.statement.executeBatch();
+                this.addUserRecord(un, pw);
                 System.out.println("User registered");
+                data.newUser = true;
             }
+            statement.close();
         } catch (SQLException ex) {
             Logger.getLogger(SudokuDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return data;
     }
     
+    public void addUserRecord(String un, String pw) {
+        try {
+            this.statement = conn.createStatement();
+            
+            this.statement.addBatch("INSERT INTO Users VALUES (2, '" + un + "', '" + pw + "')");
+            this.statement.executeBatch();
+            System.out.println("Data inserted");
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+    
     public int getNumRecords() {
         int numRecords = 0;
         try {
-            Statement statement = conn.createStatement();
+            this.statement = conn.createStatement();
             ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM USERS");
             while (rs.next()) {
                 numRecords++;
             }
+            statement.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             

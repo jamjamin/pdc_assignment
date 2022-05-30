@@ -168,21 +168,58 @@ public class SudokuGUI extends JFrame implements Observer {
     public void addListeners(ActionListener listener) {
         this.loginButton.addActionListener(listener);
         this.registerButton.addActionListener(listener);
+        this.saveExit.addActionListener(listener);
+        this.check.addActionListener(listener);
+        this.newGame.addActionListener(listener);
+        this.help.addActionListener(listener);
     }
     
     public void switchToGameScreen() {
         crd.show(mainContainer, "b");
     }
     
+    public void populateGrid(SudokuData data) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (data.user_grid.getCell(i, j).getNum() != 0) {
+                    square[i][j].setText("" + data.user_grid.getCell(i, j).getNum());
+                }
+            }
+        }
+    }
+    
+    public Grid getSudokuGrid() {
+        Grid grid = new Grid();
+        
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+               
+                //grid.setCell(pos, Integer.parseInt(square[i][j].getText()));
+                grid.getGrid()[i][j] = new Cell(Integer.parseInt(square[i][j].getText()));
+            }
+        }
+        
+        return grid;
+    }
+    
     @Override
     public void update(Observable o, Object arg) {
         SudokuData data = (SudokuData) arg;
-        if (!data.loginFlag) {
-            System.out.println("No switchy");
+        if (!data.newUser) {
+            if (!data.loginFlag) {
+                System.out.println("No switchy");
+            }
+            else if (!this.gameOn) {
+                this.switchToGameScreen();
+                this.gameOn = true;
+            }
         }
-        else if (!this.gameOn) {
-            this.switchToGameScreen();
-            this.gameOn = true;
+        else {
+            this.populateGrid(data);
+            if (!this.gameOn) {
+                this.switchToGameScreen();
+                this.gameOn = true;
+            }
         }
     }
 }
