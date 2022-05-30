@@ -190,12 +190,16 @@ public class SudokuGUI extends JFrame implements Observer {
     
     public Grid getSudokuGrid() {
         Grid grid = new Grid();
-        
+        int num;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-               
-                //grid.setCell(pos, Integer.parseInt(square[i][j].getText()));
-                grid.getGrid()[i][j] = new Cell(Integer.parseInt(square[i][j].getText()));
+                if ("".equals(square[i][j].getText())) {
+                    num = 0;
+                } else {
+                    num = Integer.parseInt(square[i][j].getText());
+                }               
+                
+                grid.getGrid()[i][j] = new Cell(num);
             }
         }
         
