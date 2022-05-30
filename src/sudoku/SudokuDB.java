@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sudoku;
 
 import java.sql.DatabaseMetaData;
@@ -9,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SudokuDB {
     private final SudokuDBManager sdbm;
@@ -38,7 +36,7 @@ public class SudokuDB {
         try {
             this.statement = conn.createStatement();
             if (checkTableExisting("Users")) {
-                this.statement.addBatch("INSERT INTO Users VALUES (1, 'doodyah', 'yahdood')");
+                this.statement.addBatch("INSERT INTO Users VALUES (1, 'testuser1', 'user1pass')");
                 this.statement.executeBatch();
                 System.out.println("Data inserted");
             }
@@ -46,6 +44,69 @@ public class SudokuDB {
             System.out.println(ex.getMessage());
             System.out.println("TLDR: Did not work :(");
         }
+    }
+    
+    public SudokuData loginUser(String un, String pw) {
+        SudokuData data = new SudokuData();
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT userid, username, password FROM USERS "
+                                                + "where username = '" + un + "'");
+            if (rs.next()) {
+                System.out.println("User exist");
+                String pass = rs.getString("password");
+                if (pw.compareTo(pass) == 0) {
+                    data.loginFlag = true;
+                }
+                else {
+                    data.loginFlag = false;
+                }
+            } else {
+                System.out.println("No user exist");
+                data.loginFlag = false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SudokuDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return data;
+    }
+    
+    public SudokuData registerUser(String un, String pw) {
+        SudokuData data = new SudokuData();
+        int numRecords;
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT userid, username, password FROM USERS "
+                                                + "where username = '" + un + "'");
+            if (rs.next()) {
+                System.out.println("User exist");
+                data.newUser = false;
+            } 
+            else {
+                System.out.println("No user exist");
+                //this.statement.addBatch("INSERT INTO Users VALUES (1, '" + un + "', '" + pw + "')");
+                //this.statement.executeBatch();
+                System.out.println("User registered");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SudokuDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return data;
+    }
+    
+    public int getNumRecords() {
+        int numRecords = 0;
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM USERS");
+            while (rs.next()) {
+                numRecords++;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            
+        }
+        return numRecords;
     }
     
     private boolean checkTableExisting(String newTableName) {
@@ -71,6 +132,7 @@ public class SudokuDB {
         }
         return flag;
     }
+    
     
     public static void main(String[] args) {
         SudokuDB test = new SudokuDB();

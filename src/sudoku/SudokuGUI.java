@@ -8,8 +8,10 @@ package sudoku;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Observable;
+import java.util.Observer;
 
-public class SudokuGUI extends JFrame implements ActionListener {
+public class SudokuGUI extends JFrame implements Observer {
     
     Container mainContainer;
     CardLayout crd = new CardLayout(10, 10);
@@ -24,12 +26,14 @@ public class SudokuGUI extends JFrame implements ActionListener {
     private JLabel title = new JLabel("Welcome to Sudoku!");   
     private JLabel uNameLabel = new JLabel("Username: ");
     private JLabel pWordLabel = new JLabel("Password: ");    
-    private JTextField inputUserName = new JTextField(15);
-    private JTextField inputPassword = new JTextField(15);  
+    public JTextField inputUserName = new JTextField(15);
+    public JTextField inputPassword = new JTextField(15);  
     private JButton loginButton = new JButton("Login");
     private JButton registerButton = new JButton("Register");
     
     // Sudoku Game Panel Setup
+    
+    private boolean gameOn = false; // Indicates if the Sudoku game is on.
     
     int currentX; // Selected square at X
     int currentY; // Selected square at Y
@@ -67,9 +71,6 @@ public class SudokuGUI extends JFrame implements ActionListener {
         loginPanel.add(loginButton);
         loginPanel.add(registerButton);
         
-        loginButton.addActionListener(this);
-        registerButton.addActionListener(this);
-        
         // Game Screen
         
         for(int i= 0; i < 9; i++) {
@@ -90,6 +91,8 @@ public class SudokuGUI extends JFrame implements ActionListener {
         buttonPanel.add(newGame);
         buttonPanel.add(help);
         rightPanel.add(buttonPanel);
+        
+        this.setVisible(true);
     }
     
     private class GridSquare extends JLabel implements MouseListener {
@@ -162,21 +165,24 @@ public class SudokuGUI extends JFrame implements ActionListener {
         
     }
     
+    public void addListeners(ActionListener listener) {
+        this.loginButton.addActionListener(listener);
+        this.registerButton.addActionListener(listener);
+    }
+    
     public void switchToGameScreen() {
         crd.show(mainContainer, "b");
     }
     
     @Override
-    public void actionPerformed(ActionEvent e) {
-        switchToGameScreen();
+    public void update(Observable o, Object arg) {
+        SudokuData data = (SudokuData) arg;
+        if (!data.loginFlag) {
+            System.out.println("No switchy");
+        }
+        else if (!this.gameOn) {
+            this.switchToGameScreen();
+            this.gameOn = true;
+        }
     }
-    
-    public static void main(String[] args) {
-        System.out.println("GUI Test running");
-        
-        SudokuGUI gui = new SudokuGUI();
-        gui.setVisible(true);
-    }
-
-    
 }

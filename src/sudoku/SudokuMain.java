@@ -5,18 +5,13 @@
  */
 package sudoku;
 
-/**
- *
- * @author zgg8595
- */
 public class SudokuMain {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
-        System.out.println("Doodyah");
+        SudokuGUI gui = new SudokuGUI(); // View
+        SudokuGame game = new SudokuGame(); // Model
+        SudokuController controller = new SudokuController(gui, game); // Controller
+        game.addObserver(gui);
     }
     
 }
