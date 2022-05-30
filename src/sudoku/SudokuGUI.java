@@ -100,6 +100,7 @@ public class SudokuGUI extends JFrame implements Observer {
         int gridX;
         int gridY;
         boolean editable;
+        boolean selected;
 
         public GridSquare(int x, int y) {
             this.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
@@ -110,41 +111,60 @@ public class SudokuGUI extends JFrame implements Observer {
             this.setHorizontalAlignment(JTextField.CENTER);
             this.gridX = x;
             this.gridY = y;
-            
+            this.editable = true;
+            this.selected = false;
             this.addMouseListener(this);
         }
-        public GridSquare(int x, int y, String str) {
+        public GridSquare(int x, int y, int num) {
             this(x, y);
-            this.setText(str);
+            this.setText("" + num);
+            this.editable = false;
+        }
+        
+        public void resetSelection() {
+            square[currentX][currentY].setBackground(Color.WHITE);
+            this.selected = false;
+        }
+        
+        public void testFunction() {
+            System.out.println("DOODYAH");
         }
         
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println(this.gridX);
-            System.out.println(this.gridY);
+            resetSelection();
+            this.selected = true;
             currentX = this.gridX;
             currentY = this.gridY;
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
-            currentX = this.gridX;
-            currentY = this.gridY;
+            this.setBackground(Color.DARK_GRAY);
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-
+            if (editable) {
+                this.setBackground(Color.GRAY);
+            }
+            else {
+                this.setBackground(Color.RED);
+            }
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
-
+            if (!selected) {
+                this.setBackground(Color.LIGHT_GRAY);
+            }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-
+            if (!selected) {
+                this.setBackground(Color.WHITE);
+            }
         }
     }
     
@@ -179,10 +199,13 @@ public class SudokuGUI extends JFrame implements Observer {
     }
     
     public void populateGrid(SudokuData data) {
+        int set_num;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (data.user_grid.getCell(i, j).getNum() != 0) {
                     square[i][j].setText("" + data.user_grid.getCell(i, j).getNum());
+                    //set_num = data.user_grid.getCell(i, j).getNum();
+                    //square[i][j] = new GridSquare(i, j, set_num);
                 }
             }
         }
