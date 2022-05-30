@@ -75,7 +75,7 @@ public class SudokuDB {
     
     public SudokuData registerUser(String un, String pw) {
         SudokuData data = new SudokuData();
-        int numRecords;
+        int numRecords = getNumRecords();
         try {
             this.statement = conn.createStatement();
             ResultSet rs = statement.executeQuery("SELECT userid, username, password FROM Users "
@@ -85,8 +85,8 @@ public class SudokuDB {
                 data.newUser = false;
             } 
             else {
-                System.out.println("No user exist");
-                this.addUserRecord(un, pw);
+                System.out.println("No user exist"); 
+                this.addUserRecord(un, pw, numRecords);
                 System.out.println("User registered");
                 data.newUser = true;
             }
@@ -97,11 +97,12 @@ public class SudokuDB {
         return data;
     }
     
-    public void addUserRecord(String un, String pw) {
+    public void addUserRecord(String un, String pw, int numRecords) {
+        int user_id = numRecords + 1;
         try {
             this.statement = conn.createStatement();
             
-            this.statement.addBatch("INSERT INTO Users VALUES (2, '" + un + "', '" + pw + "')");
+            this.statement.addBatch("INSERT INTO Users VALUES (" + user_id  + ",'" + un + "', '" + pw + "')");
             this.statement.executeBatch();
             System.out.println("Data inserted");
             statement.close();
@@ -116,7 +117,7 @@ public class SudokuDB {
             this.statement = conn.createStatement();
             ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM USERS");
             while (rs.next()) {
-                numRecords++;
+                numRecords = rs.getInt("1");
             }
             statement.close();
         } catch (SQLException ex) {
@@ -155,6 +156,7 @@ public class SudokuDB {
         SudokuDB test = new SudokuDB();
         
         test.dbsetup();
-        test.testdb();
+        //test.testdb();
+        System.out.println("Num of records " + test.getNumRecords());
     }
 }  
