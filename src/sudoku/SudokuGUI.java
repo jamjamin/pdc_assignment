@@ -38,12 +38,13 @@ public class SudokuGUI extends JFrame implements Observer {
     int currentX; // Selected square at X
     int currentY; // Selected square at Y
     
-    private JLabel[][] square = new JLabel[9][9];
+    private GridSquare[][] square = new GridSquare[9][9];
     private JPanel boardPanel = new JPanel(new GridLayout(9, 9));
     private JPanel rightPanel = new JPanel(new GridLayout(2, 1, 1, 125));
     private JPanel numPad = new JPanel(new GridLayout(3, 3));
-    private JPanel buttonPanel = new JPanel(new GridLayout(4, 1));
+    private JPanel buttonPanel = new JPanel(new GridLayout(5, 1));
     private JButton saveExit = new JButton("Save & Exit");
+    private JButton saveLogout = new JButton("Save & Logout");
     private JButton check = new JButton("Check");
     private JButton newGame = new JButton("New Game");
     private JButton help = new JButton("Help");
@@ -52,6 +53,7 @@ public class SudokuGUI extends JFrame implements Observer {
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(600, 455);
+        this.setResizable(false);
         this.mainContainer = this.getContentPane();
         this.mainContainer.setLayout(crd);
         
@@ -87,6 +89,7 @@ public class SudokuGUI extends JFrame implements Observer {
         }
         
         buttonPanel.add(saveExit);
+        buttonPanel.add(saveLogout);
         buttonPanel.add(check);
         buttonPanel.add(newGame);
         buttonPanel.add(help);
@@ -123,21 +126,27 @@ public class SudokuGUI extends JFrame implements Observer {
         
         public void resetSelection() {
             square[currentX][currentY].setBackground(Color.WHITE);
-            this.selected = false;
+            square[currentX][currentY].setSelected(false);
         }
         
-        public void testFunction() {
-            System.out.println("DOODYAH");
+        public void setSelected(boolean bool) {
+            this.selected = bool;
+        }
+        
+        public void setEditable(boolean bool) {
+            this.editable = bool;
         }
         
         @Override
         public void mouseClicked(MouseEvent e) {
-            resetSelection();
-            this.selected = true;
-            currentX = this.gridX;
-            currentY = this.gridY;
+            if (!selected) {
+                resetSelection();
+                this.selected = true;
+                currentX = this.gridX;
+                currentY = this.gridY;
+            }
         }
-
+        
         @Override
         public void mousePressed(MouseEvent e) {
             this.setBackground(Color.DARK_GRAY);
@@ -182,13 +191,13 @@ public class SudokuGUI extends JFrame implements Observer {
         public void actionPerformed(ActionEvent e) {
             square[currentX][currentY].setText("" + setNum);
         }
-        
     }
     
     public void addListeners(ActionListener listener) {
         this.loginButton.addActionListener(listener);
         this.registerButton.addActionListener(listener);
         this.saveExit.addActionListener(listener);
+        this.saveLogout.addActionListener(listener);
         this.check.addActionListener(listener);
         this.newGame.addActionListener(listener);
         this.help.addActionListener(listener);
@@ -199,13 +208,11 @@ public class SudokuGUI extends JFrame implements Observer {
     }
     
     public void populateGrid(SudokuData data) {
-        int set_num;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (data.user_grid.getCell(i, j).getNum() != 0) {
                     square[i][j].setText("" + data.user_grid.getCell(i, j).getNum());
-                    //set_num = data.user_grid.getCell(i, j).getNum();
-                    //square[i][j] = new GridSquare(i, j, set_num);
+                    square[i][j].setEditable(false);
                 }
             }
         }
