@@ -11,7 +11,8 @@ public class SudokuData {
     boolean logoutFlag = false;
     boolean newUser = false;
     
-    // Grid Data
+    // Grid Data + Game Flags
+    boolean newGrid = false;
     Grid user_grid;
-    Grid game_grid;
+    
 }

@@ -45,7 +45,7 @@ public class GridGenerator extends GridUtilities {
         }
 
         fillRemaining(0, 3);
-        //removeDigits();
+        removeDigits();
 
         return new_grid;
     }

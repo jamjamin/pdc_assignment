@@ -137,6 +137,10 @@ public class SudokuGUI extends JFrame implements Observer {
             this.editable = bool;
         }
         
+        public boolean isEditable() {
+            return this.editable;
+        }
+        
         @Override
         public void mouseClicked(MouseEvent e) {
             if (!selected) {
@@ -189,7 +193,9 @@ public class SudokuGUI extends JFrame implements Observer {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            square[currentX][currentY].setText("" + setNum);
+            if (square[currentX][currentY].isEditable()) {
+                square[currentX][currentY].setText("" + setNum);
+            }            
         }
     }
     
@@ -207,12 +213,29 @@ public class SudokuGUI extends JFrame implements Observer {
         crd.show(mainContainer, "b");
     }
     
+    public void switchToLoginScreen() {
+        crd.show(mainContainer, "a");
+    }
+    
+    public void resetGrid() {
+        System.out.println("resetGrid");
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                square[i][j].setText("");
+                square[i][j].setEditable(true);
+                square[i][j].setSelected(false);
+                square[i][j].setBackground(Color.WHITE);
+            }
+        }
+    }
+    
     public void populateGrid(SudokuData data) {
+        System.out.println("popGrid");
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (data.user_grid.getCell(i, j).getNum() != 0) {
                     square[i][j].setText("" + data.user_grid.getCell(i, j).getNum());
-                    square[i][j].setEditable(false);
+                    square[i][j].setEditable(false);            
                 }
             }
         }
@@ -239,20 +262,29 @@ public class SudokuGUI extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         SudokuData data = (SudokuData) arg;
-        if (!data.newUser) {
-            if (!data.loginFlag) {
-                System.out.println("No switchy");
+        if (!this.gameOn) {
+            if (!data.newUser) {
+                if (!data.loginFlag) {
+                    System.out.println("No Switchy");
+                }
+                else {
+                    this.switchToGameScreen();
+                    this.gameOn = true;
+                }
             }
-            else if (!this.gameOn) {
+            else {
+                this.populateGrid(data);
                 this.switchToGameScreen();
                 this.gameOn = true;
             }
         }
         else {
-            this.populateGrid(data);
-            if (!this.gameOn) {
-                this.switchToGameScreen();
-                this.gameOn = true;
+            if (data.logoutFlag) {
+                this.switchToLoginScreen();
+                this.gameOn = false;
+            }
+            else if (data.newGrid) {
+                this.populateGrid(data);
             }
         }
     }

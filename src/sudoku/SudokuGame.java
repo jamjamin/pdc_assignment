@@ -44,16 +44,32 @@ public class SudokuGame extends Observable {
         this.notifyObservers(this.data);
     }
     
-    public void checkGrid(Grid grid) {
+    public void logout() {
+        this.data.logoutFlag = true;
+        this.setChanged();
+        this.notifyObservers(this.data);
+    }
+    
+    public void newGrid() {
+        this.data.newGrid = true;
+        this.game_gen = new GridGenerator();
+        this.data.user_grid = game_gen.generateGrid();
+        this.setChanged();
+        this.notifyObservers(this.data);
+        this.data.newGrid = false;
+    }
+    
+    public boolean checkGrid(Grid grid) {
         game_grid = grid;
         grid_check = new GridChecker(game_grid);
         
         if (grid_check.solveGrid()) {
             System.out.println("YAY");
+            return true;
         }
         else {
             System.out.println("Nop");
+            return false;
         }
     }
-   
 }
