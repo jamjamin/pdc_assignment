@@ -58,7 +58,8 @@ public class SudokuController extends WindowAdapter implements ActionListener {
                 message = "Are you sure? Progress will be saved";
                 option = optionDialogBox(message, "Save & Exit", yn_options);  
                 if (option == 0) {
-                    System.out.println("Exit");      
+                    System.out.println("Exit");  
+                    this.game.saveGrid(this.gui.getSudokuGrid());
                     System.exit(0);
                 }
                 break;
@@ -67,6 +68,7 @@ public class SudokuController extends WindowAdapter implements ActionListener {
                 option =  optionDialogBox(message, "Save & Logout", yn_options); 
                 if (option == 0) {
                     System.out.println("Logout");
+                    this.game.saveGrid(this.gui.getSudokuGrid());
                     this.game.logout();
                 }
                 break;
@@ -86,7 +88,7 @@ public class SudokuController extends WindowAdapter implements ActionListener {
                         + "How to edit grid:\n"
                         + "  -  Left Click a square on the grid then select a number on the top right\n"
                         + "  -  Squares already filled with a number will be red when selected and cannot"
-                        + "     be changed.";
+                        + " be changed.";
                 System.out.println("Help Box");
                 helpBox = new JOptionPane();
                 helpBox.setMessage(message);

@@ -230,12 +230,11 @@ public class SudokuGUI extends JFrame implements Observer {
     }
     
     public void populateGrid(SudokuData data) {
-        System.out.println("popGrid");
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                if (data.user_grid.getCell(i, j).getNum() != 0) {
-                    square[i][j].setText("" + data.user_grid.getCell(i, j).getNum());
-                    square[i][j].setEditable(false);            
+                if (data.user_grid.getCell(j, i).getNum() != 0) {
+                    square[i][j].setText("" + data.user_grid.getCell(j, i).getNum());
+                    square[i][j].setEditable(data.user_grid.getCell(j, i).isEditable());            
                 }
             }
         }
@@ -253,6 +252,7 @@ public class SudokuGUI extends JFrame implements Observer {
                 }               
                 
                 grid.getGrid()[i][j] = new Cell(num);
+                grid.getGrid()[i][j].setEditable(square[i][j].isEditable());
             }
         }
         
@@ -263,11 +263,20 @@ public class SudokuGUI extends JFrame implements Observer {
     public void update(Observable o, Object arg) {
         SudokuData data = (SudokuData) arg;
         if (!this.gameOn) {
-            if (!data.newUser) {
+            if (!data.newUser) {                
                 if (!data.loginFlag) {
                     System.out.println("No Switchy");
+                    if (data.registerFlag) {
+                        JOptionPane.showMessageDialog(null, "User already exists", 
+                          "Registeration Error", JOptionPane.ERROR_MESSAGE); 
+                    } 
+                    else {
+                        JOptionPane.showMessageDialog(null, "User/Password incorrect", 
+                                        "Login Error", JOptionPane.ERROR_MESSAGE);  
+                    }
                 }
                 else {
+                    this.populateGrid(data);
                     this.switchToGameScreen();
                     this.gameOn = true;
                 }
@@ -281,6 +290,7 @@ public class SudokuGUI extends JFrame implements Observer {
         else {
             if (data.logoutFlag) {
                 this.switchToLoginScreen();
+                this.resetGrid();
                 this.gameOn = false;
             }
             else if (data.newGrid) {

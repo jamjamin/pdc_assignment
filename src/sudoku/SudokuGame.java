@@ -5,7 +5,7 @@ import java.util.Observable;
 
 public class SudokuGame extends Observable {
     public SudokuDB sdb;
-    public SudokuGUI sgui;
+    public SudokuFileManager sfm;
     public SudokuData data;
     public String username;
     
@@ -16,7 +16,6 @@ public class SudokuGame extends Observable {
     public SudokuGame() {
         sdb = new SudokuDB();
         sdb.dbsetup();
-        game_gen = new GridGenerator();
     }
     
     public void loginUser(String un, String pw) {
@@ -26,18 +25,20 @@ public class SudokuGame extends Observable {
         
         if (data.loginFlag) {
             System.out.println("Login Sucessful");
+            this.loadGrid();
         }
         this.setChanged();
         this.notifyObservers(this.data);
     }
     
     public void registerUser(String un, String pw) {
+        this.game_gen = new GridGenerator();
         this.username = un;
-        
+
         this.data = this.sdb.registerUser(un, pw);
-        
+        System.out.println(data.filePath);
         if (data.newUser) {
-            System.out.println("A new user has been summoned");             
+            System.out.println("A new user has been summoned");   
             data.user_grid = game_gen.generateGrid();
         }
         this.setChanged();
@@ -57,6 +58,17 @@ public class SudokuGame extends Observable {
         this.setChanged();
         this.notifyObservers(this.data);
         this.data.newGrid = false;
+    }
+    
+    public void saveGrid(Grid grid) {
+        data.user_grid = grid;
+        sfm = new SudokuFileManager(data);
+        sfm.saveGrid(data.filePath);
+    }
+    
+    public void loadGrid () {
+        sfm = new SudokuFileManager(data);
+        data.user_grid = sfm.loadGrid(data.filePath);
     }
     
     public boolean checkGrid(Grid grid) {
