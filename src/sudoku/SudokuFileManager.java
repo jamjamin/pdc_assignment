@@ -44,5 +44,15 @@ public class SudokuFileManager {
         
         return input_grid;
     }
+    
+    public void deleteSave(String filePath) {
+        try {
+            File f = new File(filePath);
+            f.delete();
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
    
 }

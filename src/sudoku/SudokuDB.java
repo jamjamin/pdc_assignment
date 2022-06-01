@@ -137,12 +137,32 @@ public class SudokuDB {
         }
     }
     
+    public void deleteUserRecord(String un) {
+        try {
+            this.statement = conn.createStatement();
+            this.statement.executeUpdate("DELETE FROM Users WHERE username = '" + un + "'");
+            this.statement.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+    
     public void addSaveRecord(String un, int numRecords) {
         int save_id = numRecords + 1;
         try {
             this.statement = conn.createStatement();
             this.statement.addBatch("INSERT INTO SAVES VALUES (" + save_id + ",'./resources/saves/" + un + ".ser')");
             this.statement.executeBatch();
+            this.statement.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    public void deleteSaveRecord(String un) {
+        try {
+            this.statement = conn.createStatement();
+            this.statement.executeUpdate("DELETE FROM Saves WHERE savepath = './resources/saves/" + un + ".ser'");
             this.statement.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
