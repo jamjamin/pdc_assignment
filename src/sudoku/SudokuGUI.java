@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.border.EmptyBorder;
 
 public class SudokuGUI extends JFrame implements Observer {
     
@@ -27,9 +28,10 @@ public class SudokuGUI extends JFrame implements Observer {
     private JLabel uNameLabel = new JLabel("Username: ");
     private JLabel pWordLabel = new JLabel("Password: ");    
     public JTextField inputUserName = new JTextField(15);
-    public JTextField inputPassword = new JTextField(15);  
+    public JPasswordField inputPassword = new JPasswordField(15);  
     private JButton loginButton = new JButton("Login");
     private JButton registerButton = new JButton("Register");
+    private JButton exitButton = new JButton("Exit");
     
     // Sudoku Game Panel Setup
     
@@ -72,6 +74,12 @@ public class SudokuGUI extends JFrame implements Observer {
         loginPanel.add(inputPassword);
         loginPanel.add(loginButton);
         loginPanel.add(registerButton);
+        loginPanel.add(exitButton);
+        
+        uNameLabel.setBorder(new EmptyBorder(0, 5, 0, 5));
+        pWordLabel.setBorder(new EmptyBorder(0, 20, 0, 5));
+        
+        inputPassword.setEchoChar('*');
         
         // Game Screen
         
@@ -207,6 +215,7 @@ public class SudokuGUI extends JFrame implements Observer {
         this.check.addActionListener(listener);
         this.newGame.addActionListener(listener);
         this.help.addActionListener(listener);
+        this.exitButton.addActionListener(listener);
     }
     
     public void switchToGameScreen() {
