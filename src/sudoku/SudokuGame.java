@@ -18,6 +18,13 @@ public class SudokuGame extends Observable {
         sdb.dbsetup();
     }
     
+    /**
+     * 
+     * Method to log user into the game.
+     * 
+     * @param un - username.
+     * @param pw - password.
+     */
     public void loginUser(String un, String pw) {
         this.username = un;
         
@@ -31,6 +38,13 @@ public class SudokuGame extends Observable {
         this.notifyObservers(this.data);
     }
     
+    /**
+     * 
+     * Method to register user into the game.
+     * 
+     * @param un
+     * @param pw 
+     */
     public void registerUser(String un, String pw) {
         this.game_gen = new GridGenerator();
         this.username = un;
@@ -45,12 +59,22 @@ public class SudokuGame extends Observable {
         this.notifyObservers(this.data);
     }
     
+    /**
+     * 
+     * Method to logout user.
+     * 
+     */
     public void logout() {
         this.data.logoutFlag = true;
         this.setChanged();
         this.notifyObservers(this.data);
     }
     
+    /**
+     * 
+     * Creates a new grid.
+     * 
+     */
     public void newGrid() {
         this.data.newGrid = true;
         this.game_gen = new GridGenerator();
@@ -60,27 +84,40 @@ public class SudokuGame extends Observable {
         this.data.newGrid = false;
     }
     
+    /**
+     * 
+     * Saves the user's grid into a file.
+     * 
+     */
     public void saveGrid(Grid grid) {
         data.user_grid = grid;
         sfm = new SudokuFileManager(data);
         sfm.saveGrid(data.filePath);
     }
     
+    /**
+     * 
+     * Loads the user's grid from a file.
+     * 
+     */
     public void loadGrid () {
         sfm = new SudokuFileManager(data);
         data.user_grid = sfm.loadGrid(data.filePath);
     }
     
+    /**
+     * 
+     * Method to check if the grid is completed or not.
+     * 
+     */
     public boolean checkGrid(Grid grid) {
         game_grid = grid;
         grid_check = new GridChecker(game_grid);
         
         if (grid_check.solveGrid()) {
-            System.out.println("YAY");
             return true;
         }
         else {
-            System.out.println("Nop");
             return false;
         }
     }

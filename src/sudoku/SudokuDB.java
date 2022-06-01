@@ -18,7 +18,11 @@ public class SudokuDB {
         sdbm = new SudokuDBManager();
         conn = sdbm.getConnection();
     }
-
+    /**
+     * 
+     * Creates data base component and tables (if it does not exist).
+     * 
+     */
     public void dbsetup() {
         try {
             this.statement = conn.createStatement();
@@ -35,22 +39,15 @@ public class SudokuDB {
             System.out.println(ex.getMessage());
         }
     }
-
-    public void testdb() {
-        try {
-            this.statement = conn.createStatement();
-            if (checkTableExisting("Users")) {
-                this.statement.addBatch("INSERT INTO Users VALUES (1, 'testuser1', 'user1pass')");
-                this.statement.executeBatch();
-                System.out.println("Data inserted");
-            }
-            statement.close();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.out.println("TLDR: Did not work :(");
-        }
-    }
-
+    
+    /**
+     * 
+     * Method to grab user from database for login (so long as their password is correct).
+     * 
+     * @param un - username
+     * @param pw - password
+     * @return data - stores data required for the GUI.
+     */
     public SudokuData loginUser(String un, String pw) {
         SudokuData data = new SudokuData();
         data.registerFlag = false;
@@ -63,7 +60,7 @@ public class SudokuDB {
                 int user_id = rs.getInt("userid");
                 String pass = rs.getString("password");
                 if (pw.compareTo(pass) == 0) {
-                    this.loadUserGrid(user_id, data);
+                    this.loadFilePath(user_id, data);
                     data.loginFlag = true;
                 } else {
                     data.loginFlag = false;
@@ -78,7 +75,14 @@ public class SudokuDB {
         }
         return data;
     }
-
+    /**
+     * 
+     * Registers user into data base if its a new user.
+     * 
+     * @param un - username
+     * @param pw - password
+     * @return data - Data required for the GUI.
+     */
     public SudokuData registerUser(String un, String pw) {
         SudokuData data = new SudokuData();
         int numRecords = getNumUserRecords();
@@ -94,7 +98,7 @@ public class SudokuDB {
                 System.out.println("No user exist");
                 this.addUserRecord(un, pw, numRecords);
                 this.addSaveRecord(un, numRecords);
-                this.loadUserGrid(numRecords + 1, data);
+                this.loadFilePath(numRecords + 1, data);
                 System.out.println("User registered");
                 data.newUser = true;
                 data.registerFlag = true;
@@ -106,7 +110,14 @@ public class SudokuDB {
         return data;
     }
     
-    public void loadUserGrid(int user_id, SudokuData data) {
+    /**
+     * 
+     * Method to set the user's file path from database.
+     * 
+     * @param user_id - User's ID which will be used to grab save id.
+     * @param data - Data instance parameter, to change the filePath inside.
+     */
+    public void loadFilePath(int user_id, SudokuData data) {
         String int_string = String.valueOf(user_id);
         try {
             this.statement = conn.createStatement();
@@ -122,7 +133,14 @@ public class SudokuDB {
         }
 
     }
-    
+    /**
+     * 
+     * Adds a user into user table.
+     * 
+     * @param un - username
+     * @param pw - password
+     * @param numRecords - for the user id.
+     */
     public void addUserRecord(String un, String pw, int numRecords) {
         int user_id = numRecords + 1;
         try {
@@ -137,6 +155,12 @@ public class SudokuDB {
         }
     }
     
+    /**
+     * 
+     * Deletes a user record.
+     * 
+     * @param un - username to delete.
+     */
     public void deleteUserRecord(String un) {
         try {
             this.statement = conn.createStatement();
@@ -147,6 +171,13 @@ public class SudokuDB {
         }
     }
     
+    /**
+     * 
+     * Adds a save record.
+     * 
+     * @param un - username, for grid file name.
+     * @param numRecords - for save id. 
+     */
     public void addSaveRecord(String un, int numRecords) {
         int save_id = numRecords + 1;
         try {
@@ -159,6 +190,12 @@ public class SudokuDB {
         }
     }
     
+    /**
+     * 
+     * Deletes a save record.
+     * 
+     * @param un - user's save name to delete.
+     */
     public void deleteSaveRecord(String un) {
         try {
             this.statement = conn.createStatement();
@@ -168,7 +205,13 @@ public class SudokuDB {
             System.out.println(ex.getMessage());
         }
     }
-
+    
+    /**
+     * 
+     * Method to get number of records
+     * 
+     * @return number of records.
+     */
     public int getNumUserRecords() {
         int numRecords = 0;
         try {
@@ -184,7 +227,14 @@ public class SudokuDB {
         }
         return numRecords;
     }
-
+    
+    /**
+     * 
+     * Checks if a table exists.
+     * 
+     * @param newTableName to check if it exists
+     * @return whether it exists or not.
+     */
     private boolean checkTableExisting(String newTableName) {
         boolean flag = false;
         try {
@@ -206,13 +256,5 @@ public class SudokuDB {
         } catch (SQLException ex) {
         }
         return flag;
-    }
-
-    public static void main(String[] args) {
-        SudokuDB test = new SudokuDB();
-
-        test.dbsetup();
-        //test.testdb();
-        System.out.println("Num of records " + test.getNumUserRecords());
     }
 }

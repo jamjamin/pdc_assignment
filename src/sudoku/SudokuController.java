@@ -11,12 +11,24 @@ public class SudokuController extends WindowAdapter implements ActionListener {
     public SudokuGUI gui;
     public SudokuGame game;
     
+    /**
+     * 
+     * Constructor for the Controller component for Sudoku.
+     * 
+     * @param gui
+     * @param game 
+     */
     public SudokuController(SudokuGUI gui, SudokuGame game) {
         this.gui = gui;
         this.game = game;
         this.gui.addListeners(this);
     }
-    
+    /**
+     * 
+     * Listens for any buttons clicked on the GUI then calls the appropriate method(s).
+     * 
+     * @param e - Action event parameter.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         JOptionPane helpBox;
@@ -104,6 +116,15 @@ public class SudokuController extends WindowAdapter implements ActionListener {
         }
     }
     
+    /**
+     * 
+     * A dialog box with yes/no options
+     * 
+     * @param message to show.
+     * @param boxTitle of the dialog box.
+     * @param options for users to click on.
+     * @return option which indicates what option user has chosen.
+     */
     public int optionDialogBox(String message, String boxTitle, String[] options) {
         int option;
         
