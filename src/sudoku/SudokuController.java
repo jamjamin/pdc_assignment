@@ -3,7 +3,6 @@ package sudoku;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -23,7 +22,8 @@ public class SudokuController extends WindowAdapter implements ActionListener {
         JOptionPane helpBox;
         String command = e.getActionCommand();
         String username = this.gui.inputUserName.getText();
-        String password = this.gui.inputPassword.getText();
+        char[] pass_string = this.gui.inputPassword.getPassword();
+        String password = String.copyValueOf(pass_string);       
         String[] yn_options = {"Yes", "No"};
         String message;
         int option;  
@@ -34,6 +34,9 @@ public class SudokuController extends WindowAdapter implements ActionListener {
                 break;
             case "Register":
                 this.game.registerUser(username, password);
+                break;    
+            case "Exit":
+                System.exit(0);
                 break;
             // Main Game Cases
             case "Check":

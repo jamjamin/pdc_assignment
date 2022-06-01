@@ -36,10 +36,10 @@ public class SudokuGame extends Observable {
         this.username = un;
 
         this.data = this.sdb.registerUser(un, pw);
-        System.out.println(data.filePath);
         if (data.newUser) {
             System.out.println("A new user has been summoned");   
             data.user_grid = game_gen.generateGrid();
+            this.saveGrid(data.user_grid);
         }
         this.setChanged();
         this.notifyObservers(this.data);
