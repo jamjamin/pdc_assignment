@@ -299,6 +299,8 @@ public class SudokuGUI extends JFrame implements Observer {
         else {
             if (data.logoutFlag) {
                 this.switchToLoginScreen();
+                this.inputUserName.setText("");
+                this.inputPassword.setText("");
                 this.resetGrid();
                 this.gameOn = false;
             }
