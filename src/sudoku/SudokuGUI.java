@@ -51,6 +51,11 @@ public class SudokuGUI extends JFrame implements Observer {
     private JButton newGame = new JButton("New Game");
     private JButton help = new JButton("Help");
     
+    /**
+     * 
+     * Constructor to setup GUI when game is launched.
+     * 
+     */
     public SudokuGUI () {
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -93,7 +98,7 @@ public class SudokuGUI extends JFrame implements Observer {
         gameScreen.add(rightPanel, BorderLayout.EAST);
         rightPanel.add(numPad);
         for (int i = 0; i < 9; i++) {
-            numPad.add(new KeypadButton(i + 1));
+            numPad.add(new NumpadButton(i + 1));
         }
         
         buttonPanel.add(saveExit);
@@ -106,6 +111,11 @@ public class SudokuGUI extends JFrame implements Observer {
         this.setVisible(true);
     }
     
+    /**
+     * 
+     *  Private class for each square on the Sudoku board.
+     * 
+     */
     private class GridSquare extends JLabel implements MouseListener {
         
         int gridX;
@@ -189,11 +199,16 @@ public class SudokuGUI extends JFrame implements Observer {
         }
     }
     
-    private class KeypadButton extends JButton implements ActionListener {
+    /**
+     * 
+     *  Private class for a 3x3 grid of numbers.
+     * 
+     */
+    private class NumpadButton extends JButton implements ActionListener {
         
         int setNum;
         
-        public KeypadButton (int i) {
+        public NumpadButton (int i) {
             this.setNum = i;
             this.setText("" + i);
             this.addActionListener(this);
@@ -207,6 +222,12 @@ public class SudokuGUI extends JFrame implements Observer {
         }
     }
     
+    /**
+     * 
+     *  Gets ActionListener from the SudokuController class to add to each button.
+     * 
+     * @param listener 
+     */
     public void addListeners(ActionListener listener) {
         this.loginButton.addActionListener(listener);
         this.registerButton.addActionListener(listener);
@@ -218,6 +239,11 @@ public class SudokuGUI extends JFrame implements Observer {
         this.exitButton.addActionListener(listener);
     }
     
+    /**
+     * 
+     *  Functions that switch between two panels.
+     * 
+     */
     public void switchToGameScreen() {
         crd.show(mainContainer, "b");
     }
@@ -226,6 +252,11 @@ public class SudokuGUI extends JFrame implements Observer {
         crd.show(mainContainer, "a");
     }
     
+    /**
+     * 
+     *  Clears grid after user logs out.
+     * 
+     */
     public void resetGrid() {
         System.out.println("resetGrid");
         for (int i = 0; i < 9; i++) {
@@ -237,7 +268,12 @@ public class SudokuGUI extends JFrame implements Observer {
             }
         }
     }
-    
+    /**
+     * 
+     * Fills the grid based on the user's grid data.
+     * 
+     * @param data 
+     */
     public void populateGrid(SudokuData data) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -249,6 +285,12 @@ public class SudokuGUI extends JFrame implements Observer {
         }
     }
     
+    /**
+     * 
+     * Method for retrieving grid data from the GUI.
+     * 
+     * @return grid from the game.
+     */
     public Grid getSudokuGrid() {
         Grid grid = new Grid();
         int num;
@@ -268,6 +310,14 @@ public class SudokuGUI extends JFrame implements Observer {
         return grid;
     }
     
+    /**
+     * 
+     *  GUI Interaction method. This is called every time a user clicks on a button.
+     *  
+     * 
+     * @param o
+     * @param arg 
+     */
     @Override
     public void update(Observable o, Object arg) {
         SudokuData data = (SudokuData) arg;

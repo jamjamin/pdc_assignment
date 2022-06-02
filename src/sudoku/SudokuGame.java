@@ -102,6 +102,7 @@ public class SudokuGame extends Observable {
      */
     public void loadGrid () {
         sfm = new SudokuFileManager(data);
+        sdb.loadFilePath(data.save_id, data);
         data.user_grid = sfm.loadGrid(data.filePath);
     }
     

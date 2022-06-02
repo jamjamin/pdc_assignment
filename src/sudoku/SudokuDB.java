@@ -60,7 +60,7 @@ public class SudokuDB {
                 int user_id = rs.getInt("userid");
                 String pass = rs.getString("password");
                 if (pw.compareTo(pass) == 0) {
-                    this.loadFilePath(user_id, data);
+                    data.save_id = user_id;
                     data.loginFlag = true;
                 } else {
                     data.loginFlag = false;
@@ -112,7 +112,7 @@ public class SudokuDB {
     
     /**
      * 
-     * Method to set the user's file path from database.
+     * Method to set the user's file path stored in database.
      * 
      * @param user_id - User's ID which will be used to grab save id.
      * @param data - Data instance parameter, to change the filePath inside.
@@ -131,7 +131,6 @@ public class SudokuDB {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-
     }
     /**
      * 

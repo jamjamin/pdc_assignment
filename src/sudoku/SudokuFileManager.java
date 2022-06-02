@@ -10,10 +10,23 @@ public class SudokuFileManager {
     Grid gridToSave;
     String user;
     
+    /**
+     * 
+     * Constructor which sets the instance variable gridToSave to the user's
+     * grid.
+     * 
+     * @param data 
+     */
     public SudokuFileManager (SudokuData data) {
         this.gridToSave = data.user_grid;
     }
     
+    /**
+     * 
+     * Saves the grid to a file (Overwrites it if already exists).
+     * 
+     * @param filePath 
+     */
     public void saveGrid(String filePath) {
         try {
             fos = new FileOutputStream(filePath);
@@ -26,6 +39,13 @@ public class SudokuFileManager {
         }
     }
     
+    /**
+     * 
+     * Loads the grid data from file.
+     * 
+     * @param filePath to file.
+     * @return grid data.
+     */
     public Grid loadGrid(String filePath) {
         Grid input_grid = null;
         try {
@@ -45,6 +65,12 @@ public class SudokuFileManager {
         return input_grid;
     }
     
+    /**
+     * 
+     * Deletes the save file.
+     * 
+     * @param filePath 
+     */
     public void deleteSave(String filePath) {
         try {
             File f = new File(filePath);
